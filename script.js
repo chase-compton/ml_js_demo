@@ -1,11 +1,11 @@
 const generateData = () => {
   //generate sin data
-  const numDataPoints = 100;
+  const numDataPoints = 10000;
   const data = [];
 
-  for (let i = 0; i < numDataPoints; i++) {
-    const amplitude = Math.random() * 50 + 10;
-    const frequency = Math.random() * 10 + 1;
+  for (let i = 0; i < numDataPoints / 2; i++) {
+    const amplitude = Math.random() * 30 + 10;
+    const frequency = Math.random() * 5 + 1;
     const phase = Math.random() * Math.PI * 2;
     const item = {};
     for (let j = 0; j < 100; j++) {
@@ -17,10 +17,10 @@ const generateData = () => {
   }
 
   //generate noise data
-  for (let i = 0; i < numDataPoints; i++) {
+  for (let i = 0; i < numDataPoints / 2; i++) {
     const item = {};
     for (let j = 0; j < 100; j++) {
-      const value = Math.floor(Math.random() * 120 - 60); // Random value between 10 and 60
+      const value = Math.floor(Math.random() * 80 - 40); // Random value between -40:40
       item[j] = value; // Assign the noise value to numerical indices
     }
     item.label = "noise"; // Set the label
@@ -52,23 +52,21 @@ data.forEach((item) => {
     }
   }
 
-  console.log('100 Values', first100Values);
   const inputs = first100Values;
-  console.log(inputs);
   const output = {
     label: item.label,
   };
 
   nn.addData(inputs, output);
 });
-console.log('Raw', nn.data);
+console.log("Raw", nn.data);
 
 // Step 5: normalize your data;
 nn.normalizeData();
 // Step 6: train your neural network
 const trainingOptions = {
-  epochs: 32,
-  batchSize: 12,
+  epochs: 60,
+  batchSize: 20,
 };
 nn.train(trainingOptions, finishedTraining);
 
@@ -79,15 +77,23 @@ function finishedTraining() {
 
 // Step 8: make a classification
 function classify() {
-  const amplitude = Math.random() * 50 + 10;
-  const frequency = Math.random() * 10 + 1;
-  const phase = Math.random() * Math.PI * 2;
-  const input = {};
-  for (let j = 0; j < 100; j++) {
-    const value = Math.round(amplitude * Math.sin(frequency * j + phase));
-    input[j] = value; // Assign the sine wave value to numerical indices
+  for (let i = 0; i < 5; i++) {
+    const amplitude = Math.random() * 30 + 10;
+    const frequency = Math.random() * 5 + 1;
+    const phase = Math.random() * Math.PI * 2;
+    const sinInput = {};
+    for (let j = 0; j < 100; j++) {
+      const value = Math.round(amplitude * Math.sin(frequency * j + phase));
+      sinInput[j] = value; 
+    }
+    nn.classify(sinInput, handleResults);
+    const noiseInput = {};
+    for (let j = 0; j < 100; j++) {
+      const value = Math.floor(Math.random() * 80 - 40); // Random value between -60:60
+      noiseInput[j] = value; // Assign the noise value to numerical indices
+    }
+    nn.classify(noiseInput, handleResults)
   }
-  nn.classify(input, handleResults);
 }
 
 // Step 9: define a function to handle the results of your classification
