@@ -1,9 +1,10 @@
 //Step 1: Gather data
 const generateData = () => {
-  //generate sin data
-  const numDataPoints = 10000;
+  // 10,000 Samples, 5000 each
+  const numDataPoints = 5000;
   const data = [];
-
+  
+  //generate sin data
   for (let i = 0; i < numDataPoints / 2; i++) {
     const amplitude = Math.random() * 30 + 10;
     const frequency = Math.random() * 5 + 1;
@@ -21,7 +22,7 @@ const generateData = () => {
   for (let i = 0; i < numDataPoints / 2; i++) {
     const item = {};
     for (let j = 0; j < 100; j++) {
-      const value = Math.floor(Math.random() * 80 - 40); // Random value between -40:40
+      const value = Math.floor(Math.random() * 80 - 40); // Random value between -40 and 40
       item[j] = value; // Assign the noise value to numerical indices
     }
     item.label = "noise"; // Set the label
@@ -65,10 +66,15 @@ console.log("Raw", nn.data);
 // Step 5: normalize your data;
 nn.normalizeData();
 // Step 6: train your neural network
+// Epoch: 60 - 40
+// Batch Size: 20 - 10
 const trainingOptions = {
-  epochs: 60,
+  epochs: 50,
   batchSize: 20,
 };
+
+console.log('Epochs: ', trainingOptions.epochs)
+console.log('Batch Size: ', trainingOptions.batchSize)
 nn.train(trainingOptions, finishedTraining);
 
 // Step 7: use the trained model
@@ -90,7 +96,7 @@ function classify() {
     nn.classify(sinInput, handleResults);
     const noiseInput = {};
     for (let j = 0; j < 100; j++) {
-      const value = Math.floor(Math.random() * 80 - 40); // Random value between -60:60
+      const value = Math.floor(Math.random() * 80 - 40); // Random value between -40 and 40
       noiseInput[j] = value; // Assign the noise value to numerical indices
     }
     nn.classify(noiseInput, handleResults)
@@ -103,5 +109,5 @@ function handleResults(error, result) {
     console.error(error);
     return;
   }
-  console.log(result);
+  console.log(result[0]);
 }
