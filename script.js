@@ -1,3 +1,4 @@
+//Step 1: Gather data
 const generateData = () => {
   //generate sin data
   const numDataPoints = 10000;
