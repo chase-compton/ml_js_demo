@@ -1,7 +1,7 @@
 //Step 1: Gather data
 const generateData = () => {
   // 10,000 Samples, 5000 each
-  const numDataPoints = 5000;
+  const numDataPoints = 10000;
   const data = [];
   
   //generate sin data
